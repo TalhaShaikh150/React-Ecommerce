@@ -44,6 +44,44 @@ const CardSidebar = () => {
           </button>
         </div>
 
+        {!cartCount && (
+          <div className="h-full flex flex-col items-center justify-center space-y-6 p-8">
+            {/* 1. Elegant Icon Container */}
+            <div className="w-20 h-20 border border-gray-200 rounded-full flex items-center justify-center mb-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1}
+                stroke="currentColor"
+                className="w-8 h-8 text-gray-400"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                />
+              </svg>
+            </div>
+
+            <div className="text-center">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-3">
+                Your Bag is Empty
+              </p>
+              <h3 className="text-2xl font-serif font-medium text-black">
+                Looking for inspiration?
+              </h3>
+            </div>
+
+            <button
+              onClick={() => dispatch(toggleCart())}
+              className="mt-4 px-8 py-3 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors"
+            >
+              Continue Shopping
+            </button>
+          </div>
+        )}
+
         <div className="flex-1 overflow-y-auto p-6 space-y-8">
           {/* Item 2 */}
           {cartItems.map((cartProduct) => (
