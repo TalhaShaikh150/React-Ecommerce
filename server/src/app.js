@@ -1,40 +1,59 @@
 const express = require("express");
-const PORT = 3000;
-const products = require("./products.json");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
+const dotenv = require("dotenv");
+const { createClient } = require("@supabase/supabase-js");
+
+dotenv.config();
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
+
 const app = express();
+const PORT = 3000;
 
 app.use(cors());
 
 app.use(express.json());
 
+const products = require("./products.json");
+
 app.get("/api/products", (req, res) => {
-  res.send(products);
+  res.json(products);
 });
 
 app.get("/api/products/:id", (req, res) => {
-  const productId = req.params.id;
-  const searchedProduct = products.find(
-    (item) => item.id === Number(productId)
-  );
-  res.send(searchedProduct);
+  const productId = Number(req.params.id);
+  const product = products.find((item) => item.id === productId);
+
+  if (!product) {
+    return res.status(404).json({ message: "Product not found" });
+  }
+
+  res.json(product);
 });
 
-//Post
-app.post("/api/products", (req, res) => {
-  const body = req.body;
-  products.push({ ...body, id: products.length + 1 });
+app.post("/api/products", async (req, res) => {
+  const newProduct = { ...req.body, id: products.length + 1 };
+  products.push({ ...newProduct, id: products.length + 1 });
+
   fs.writeFile(
     path.join(__dirname, "./products.json"),
-    JSON.stringify(products),
-    (err, data) => {
-      return res.json({ status: "Success", id: products.length });
+    JSON.stringify(products, null, 2),
+    (err) => {
+      if (err) {
+        console.error("Error writing file:", err);
+        return res.status(500).json({ message: "Failed to save product" });
+      }
+
+      res.status(201).json({ status: "Success", product: newProduct });
     }
   );
 });
 
 app.listen(PORT, () => {
-  console.log("Server is running");
+  console.log(`Server is running on port ${PORT}`);
 });
