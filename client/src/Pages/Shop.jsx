@@ -81,7 +81,7 @@ const Shop = () => {
             </span>
           </button>
 
-          <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest hidden md:block">
+          <span className="text-sm font-mono text-gray-900 uppercase tracking-widest hidden md:block">
             {products.length} Products Found
           </span>
 
@@ -91,6 +91,9 @@ const Shop = () => {
                 Sort By
               </span>
               <svg
+              onClick={()=>{
+
+              }}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"

@@ -29,13 +29,10 @@ const ProductCard = ({ product }) => {
 
           <div className="flex items-center gap-2 mt-1">
             <p className="text-[10px] text-gray-500 uppercase tracking-widest">
-              {product.category.name}
+              {product.category}
             </p>
 
-            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <div className="w-2 h-2 rounded-full bg-black"></div>
-              <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-            </div>
+          
           </div>
         </div>
       </div>

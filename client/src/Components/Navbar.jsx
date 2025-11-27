@@ -1,73 +1,76 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleCart } from "../features/cart/cartSlice";
 import CardSidebar from "./CardSidebar";
 import { ShoppingBag, Search } from "lucide-react";
+
 const Navbar = () => {
   const dispatch = useDispatch();
-
   const cartCount = useSelector((state) => state.cart.count);
   const isOpen = useSelector((state) => state.cart.isOpen);
 
+  // --- STYLING LOGIC ---
   const navLinkClass = ({ isActive }) =>
-    `pb-1 border-b-2 transition-all ${
+    `text-sm font-bold uppercase tracking-[0.10em] pb-1 border-b-2 transition-all duration-300 ease-in-out ${
       isActive
-        ? "border-black text-black"
-        : "border-transparent text-gray-600 hover:border-black hover:text-black"
+        ? "border-black text-black" // Active State
+        : "border-transparent text-gray-500 hover:text-black hover:border-black" // Inactive + Hover State
     }`;
 
   return (
-    <nav className="w-full bg-white sticky top-0 z-50">
-      {/* Top Utility Bar */}
-      <div className="border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"></div>
-      </div>
+    <nav className="w-full bg-white sticky top-0 z-50 border-b border-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Single Line Container: h-20 (80px height) */}
+        <div className="flex items-center justify-between h-20">
+          {/* 1. LOGO */}
+          <div className="flex-shrink-0 cursor-pointer">
+            <NavLink
+              to="/"
+              className="text-2xl font-serif font-black tracking-tight text-black"
+            >
+              SHOP.CO
+            </NavLink>
+          </div>
 
-      {/* Main Logo Area */}
-      <div className="pt-6 pb-4 flex justify-center relative">
-        <a
-          href="#"
-          className="text-4xl font-serif font-medium tracking-tight text-black"
-        >
-          SHOP.CO
-        </a>
+          {/* 2. CENTER NAVIGATION */}
+          {/* 'hidden md:flex' hides this on mobile, shows on medium screens up */}
+          <div className="hidden md:flex items-center gap-8">
+            <NavLink to="/" className={navLinkClass}>
+              Home
+            </NavLink>
+            <NavLink to="/shop" className={navLinkClass}>
+              Shop
+            </NavLink>
+            {/* You can add more links here easily */}
+            {/* <NavLink to="/about" className={navLinkClass}>About</NavLink> */}
+          </div>
 
-        {/* Absolute positioned icons */}
-        <div className="absolute right-8 top-1/2 -translate-y-1/2 flex items-center gap-4">
-          <button className="p-2 hover:bg-gray-50 rounded-full">
-            <Search />
-          </button>
-          <button className="p-2 hover:bg-gray-50 rounded-full relative">
-            <ShoppingBag
-              onClick={() => {
-                dispatch(toggleCart());
-              }}
-            />
+          {/* 3. RIGHT ICONS */}
+          <div className="flex items-center gap-1">
+            <button className="p-2 text-gray-600 hover:bg-gray-100 hover:text-black rounded-full transition-colors duration-200">
+              <Search size={20} />
+            </button>
 
-            {cartCount == 0 ? (
-              <></>
-            ) : (
-              <span className="absolute top-0 right-1 flex justify-center items-center font-medium w-5 h-5 bg-gray-700 text-white rounded-full">
-                <p> {cartCount}</p>
-              </span>
-            )}
-          </button>
+            <button
+              className="p-2 text-gray-600 hover:bg-gray-100 hover:text-black rounded-full relative transition-colors duration-200"
+              onClick={() => dispatch(toggleCart())}
+            >
+              <ShoppingBag size={20} />
+
+              {/* Cart Counter Badge */}
+              {cartCount > 0 && (
+                <span className="absolute top-0 right-0 flex justify-center items-center text-[10px] font-bold w-4 h-4 bg-black text-white rounded-full animate-bounce-short">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
+      {/* Sidebar Overlay */}
       {isOpen && <CardSidebar />}
-      {/* Bottom NavLinks Area */}
-      <div className="pb-6">
-        <div className="flex justify-center gap-8 text-xs font-bold uppercase tracking-[0.15em]">
-          <NavLink to="/" className={navLinkClass}>
-            Home
-          </NavLink>
-          <NavLink to="/shop" className={navLinkClass}>
-            Shop
-          </NavLink>
-        </div>
-      </div>
     </nav>
   );
 };
